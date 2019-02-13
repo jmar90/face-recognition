@@ -63,7 +63,7 @@ class App extends Component {
 
   onButtonSubmit = () => {
     this.setState({imageUrl: this.state.input}); // Have imageUrl update to whatever is entered into textbox ('input')
-    app.models
+    app.models  // Set-up code for Clarifai API
       .predict(
         Clarifai.FACE_DETECT_MODEL, 
         this.state.input)  // Url input
