@@ -49,7 +49,7 @@ const particlesOptions = {
   }
 }
 
-// Build Class Component
+// Build App Component
 class App extends Component {
   // Add in state for input (textbox) and imageUrl (note: constructor()...super(), etc. is the code syntax required by React)
   constructor() {
