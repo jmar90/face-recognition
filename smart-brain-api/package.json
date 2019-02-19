@@ -1,0 +1,20 @@
+{
+  "name": "smart-brain-api",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    
+  },
+  "author": "Julia Martin",
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^1.18.3",
+    "express": "^4.16.4"
+  },
+  "devDependencies": {
+    "install": "^0.12.2",
+    "nodemon": "^1.18.10",
+    "npm": "^6.8.0"
+  }
+}
