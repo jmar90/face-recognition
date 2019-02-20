@@ -61,17 +61,44 @@ app.post('/register', (req, res) => {
 	res.json(database.users[database.users.length-1]);
 })
 
+/* Profile */
+app.get('/profile/:id', (req, res) => {
+	// Grab id from request.params using destructuring. Pull id from params b/c id is coming from the URL 
+	// (whatever number is entered in lieu of ':id'), not from the body of the request.
+	const { id } = req.params;
+	let found = false;
+	database.users.forEach(user => {
+		// If user.id stored in database matches the id that we pull from req.params
+		if(user.id === id) {
+			// If user found, stop loop & return user
+			found = true;
+			return res.json(user);
+		} 
+	})
+	// If user not found, then send 400 message & 'not found' message
+	if(!found){
+		res.status(400).json('Not found');
+	}
+})
+
+/* Image: update user to increase entries count */
+app.put('/image', (req, res) => {
+	const { id } = req.body;
+	let found = false;
+	database.users.forEach(user => {
+		if(user.id === id) {
+			found = true;
+			// Increase entries by 1
+			user.entries++
+			return res.json(user.entries);
+		} 
+	})
+	if(!found){
+		res.status(400).json('Not found');
+	}
+})
+
 // CREATE SERVER ON PORT 3000
 app.listen(3000, () => {
 	console.log('App is running on port 3000');
 })
-
-/*
-Notes re: what we want to do with API
-Routes:
-/ --> res = this is working
-/signIn --> POST request (posting user info). Respond with success/fail
-/register --> POST request (add data to database). Respond with new user object.
-/profile/:userId --> GET request (get user info). Respond with user.
-/image --> PUT (will update score). Respond with updated user object.
-*/
