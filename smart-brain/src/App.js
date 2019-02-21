@@ -60,7 +60,25 @@ class App extends Component {
       box: {},
       route: 'signin',  // Route state will keep track of where we are on page. Want to start on sign in.
       isSignedIn: false,
+      user: {
+        id: '',
+        name: '',
+        email: '',
+        entries: 0,
+        joined: ''
+      }
     }
+  }
+
+  loadUser = (data) => {
+    // Set state of user to be equal to the user data passed thru loadUser ('data')
+    this.setState({user: {
+      id: data.id,
+      name: data.name,
+      email: data.email,
+      entries: data.entries,
+      joined: data.joined
+    }})
   }
 
   calculateFaceLocation = (data) => {
@@ -125,7 +143,7 @@ class App extends Component {
         { route === 'home'  
           ? <div>       { /* If route equal to home, render home screen */}
               <Logo />  
-              <Rank />
+              <Rank name={this.state.user.name} entries={this.state.user.entries} />
               <ImageLinkForm 
                 onInputChange = {this.onInputChange} 
                 onButtonSubmit = {this.onButtonSubmit} 
@@ -134,8 +152,8 @@ class App extends Component {
             </div> 
           : (
               route === 'signin' 
-              ? <SignIn onRouteChange = {this.onRouteChange}/>  // If route state equal to signin, return SignIn component
-              : <Register onRouteChange = {this.onRouteChange}/>  // Otherwise, return Register form
+              ? <SignIn loadUser= {this.loadUser} onRouteChange = {this.onRouteChange}/>  // If route state equal to signin, return SignIn component
+              : <Register loadUser= {this.loadUser} onRouteChange = {this.onRouteChange}/>  // Otherwise, return Register form
             )
         }
       </div>
