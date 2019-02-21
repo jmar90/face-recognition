@@ -35,9 +35,10 @@ class SignIn extends React.Component {
 			})
 		})
 		.then(response => response.json())
-		.then(data => {
-			// If the data received back from server = 'Success' (that is the json message server responds with when login is a success)
-			if(data === 'Success'){
+		.then(user => {
+			// If the data received back from server = valid user id
+			if(user.id){
+				this.props.loadUser(user);
 				// Change route to 'home' (ie, user will be redirected to home page)
 				this.props.onRouteChange('home');
 			}
