@@ -2,10 +2,12 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const bcrypt = require('bcrypt-nodejs');
+const cors = require('cors');
 
 const app = express(); 
 
 app.use(bodyParser.json());
+app.use(cors());
 
 // TEMP DATA (use until database is set up)
 const database = {
@@ -25,13 +27,6 @@ const database = {
 			password: 'bananas',
 			entries: 0,
 			joined: new Date()
-		}
-	],
-	login: [
-		{
-			id: '987',
-			hash: '',
-			email: 'john@gmail.com'
 		}
 	]
 }
