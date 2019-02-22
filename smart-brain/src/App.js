@@ -117,7 +117,23 @@ class App extends Component {
         this.state.input)  // Url input
       // calculateFaceLocation receives response from Clarifai's face detection API & then uses that to generate coordinates for box.
       // displayFaceBox then receives these coordinates from calculateFaceLocation & generates a square from them.
-      .then(response => this.displayFaceBox(this.calculateFaceLocation(response)))
+      .then(response => {
+        if(response) {
+          fetch('http://localhost:3000/image', {
+            method: 'put',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({
+              id: this.state.user.id,
+            })
+          })
+          .then(response => response.json())
+          .then(count => {
+            // Set entries to current count
+            this.setState(Object.assign(this.state.user, {entries: count}))
+          })
+        }
+        this.displayFaceBox(this.calculateFaceLocation(response))
+      })
       .catch(err => console.log(err));
   }
 
