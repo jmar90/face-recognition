@@ -5,7 +5,7 @@ const bcrypt = require('bcrypt-nodejs');
 const cors = require('cors');
 const knex = require('knex'); //knex is used for connecting to DB & using postgresql
 
-const postgres = knex({  //connect to our db
+const db = knex({  //connect to our db
 	client: 'pg',
 	connection: {	//provide information where DB is
 		host: '127.0.0.1',	//local host
@@ -14,8 +14,6 @@ const postgres = knex({  //connect to our db
 		database: 'smart-brain'
 	}
 });
-
-console.log(postgres.select('*').from('users'));
 
 const app = express(); 
 
@@ -64,16 +62,18 @@ app.post('/signin', (req, res) => {
 app.post('/register', (req, res) => {
 	// Grab email, name, & password from the request.body using destructuring
 	const { email, name, password } = req.body;
-	// For time being, push data into users array (eventually, will create database)
-	database.users.push({
-		id: '125',
-		name: name,
-		email: email,
-		entries: 0,
-		joined: new Date()
+	// Insert the email & other registration info into our users table in our 'db' database
+	db('users')
+		.returning('*')  //return all the columns
+		.insert({
+			email: email,
+			name: name,
+			joined: new Date()
 	})
-	// Return last item in users array (ie, the data for the user that was just created)
-	res.json(database.users[database.users.length-1]);
+	.then(user => {
+		res.json(user[0]);
+	})
+	.catch(err => res.status(400).json('Unable to register'))  //if error (eg, email already registered), send person a message saying 'unable to register'
 })
 
 /* Profile */

@@ -23,7 +23,7 @@ class Register extends React.Component {
 
 	// Create function that will run when input in name field.
 	onNameChange = (event) => {
-		this.setState({ email: event.target.value })
+		this.setState({ name: event.target.value })
 	}
 
 	// Create function that will run when when sign in data is submitted (ie, sign in button clicked)
