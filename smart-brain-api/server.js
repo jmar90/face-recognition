@@ -71,7 +71,7 @@ app.post('/register', (req, res) => {
 			joined: new Date()
 	})
 	.then(user => {
-		res.json(user[0]);
+		res.json(user[0]); //res.json will convert response to JS object & then return that JS object
 	})
 	.catch(err => res.status(400).json('Unable to register'))  //if error (eg, email already registered), send person a message saying 'unable to register'
 })
@@ -81,19 +81,15 @@ app.get('/profile/:id', (req, res) => {
 	// Grab id from request.params using destructuring. Pull id from params b/c id is coming from the URL 
 	// (whatever number is entered in lieu of ':id'), not from the body of the request.
 	const { id } = req.params;
-	let found = false;
-	database.users.forEach(user => {
-		// If user.id stored in database matches the id that we pull from req.params
-		if(user.id === id) {
-			// If user found, stop loop & return user
-			found = true;
-			return res.json(user);
-		} 
-	})
-	// If user not found, then send 400 message & 'not found' message
-	if(!found){
-		res.status(400).json('Not found');
-	}
+	db.select('*').from('users').where({id})  //select user whose id equals the id from req.params
+		.then(user => {
+			if(user.length){ //If user is not an empty array (ie, it has length)
+				res.json(user[0]) //res.json to convert user object from json to JS object. JS object of user will be returned.
+			} else{
+				res.status(400).json('Not found')
+			}
+		})
+		.catch(err => res.status(400).json('Error getting user'))
 })
 
 /* Image: update user to increase entries count */
