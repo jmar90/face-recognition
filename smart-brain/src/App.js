@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import Particles from 'react-particles-js';
-import Clarifai from 'clarifai';
 import Navigation from './components/navigation/Navigation';
 import SignIn from './components/signIn/SignIn';
 import Register from './components/register/Register';
@@ -9,11 +8,6 @@ import ImageLinkForm from './components/imageLinkForm/ImageLinkForm';
 import FaceRecognition from './components/faceRecognition/FaceRecognition';
 import Rank from './components/rank/Rank';
 import './App.css';
-
-// Set up Clarifai API (enter API key, assign to var 'app') - code came from Clarifai's website
-const app = new Clarifai.App({
-  apiKey: ''
-});
 
 // Set up Particles.js: Select properties of particles & assign them to var particlesOption
 // (consulted library's website for object names; partcilesOptions was name chosen by me - could've chosen any name)
@@ -49,25 +43,28 @@ const particlesOptions = {
   }
 }
 
+// Set initial state (all states are blank/at default values)
+const initialState = {
+  input: '',  // This is what user enters into detect textbox. Have initial state be equal to empty string.
+  imageUrl: '',
+  box: {},
+  route: 'signin',  // Route state will keep track of where we are on page. Want to start on sign in.
+  isSignedIn: false,
+  user: {
+    id: '',
+    name: '',
+    email: '',
+    entries: 0,
+    joined: ''
+  }
+}
+
 // Build App Component
 class App extends Component {
   // Add in state for input (textbox) and imageUrl (note: constructor()...super(), etc. is the code syntax required by React)
   constructor() {
     super();
-    this.state = {
-      input: '',  // This is what user enters into detect textbox. Have initial state be equal to empty string.
-      imageUrl: '',
-      box: {},
-      route: 'signin',  // Route state will keep track of where we are on page. Want to start on sign in.
-      isSignedIn: false,
-      user: {
-        id: '',
-        name: '',
-        email: '',
-        entries: 0,
-        joined: ''
-      }
-    }
+    this.state = initialState;
   }
 
   loadUser = (data) => {
@@ -111,12 +108,16 @@ class App extends Component {
 
   onButtonSubmit = () => {
     this.setState({imageUrl: this.state.input}); // Have imageUrl update to whatever is entered into textbox ('input')
-    app.models  // Set-up code for Clarifai API
-      .predict(
-        Clarifai.FACE_DETECT_MODEL, 
-        this.state.input)  // Url input
       // calculateFaceLocation receives response from Clarifai's face detection API & then uses that to generate coordinates for box.
       // displayFaceBox then receives these coordinates from calculateFaceLocation & generates a square from them.
+      fetch('http://localhost:3000/imageurl', {
+        method: 'post',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({
+          input: this.state.input,
+        })
+      })
+      .then(response => response.json())
       .then(response => {
         if(response) {
           fetch('http://localhost:3000/image', {
@@ -131,6 +132,7 @@ class App extends Component {
             // Set entries to current count
             this.setState(Object.assign(this.state.user, {entries: count}))
           })
+          .catch(console.log)
         }
         this.displayFaceBox(this.calculateFaceLocation(response))
       })
@@ -140,7 +142,7 @@ class App extends Component {
   // When person signs in, redirect to home; sign out, redirect to sign in
   onRouteChange = (route) => {
     if (route === 'signout'){
-      this.setState({isSignedIn: false})
+      this.setState(initialState) //By setting to initial state, user info will be removed from state
     } else if (route === 'home'){
       this.setState({isSignedIn: true})
     } 
