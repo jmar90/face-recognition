@@ -42,7 +42,7 @@ class Register extends React.Component {
 		.then(response => response.json())
 		.then(user => {
 			// If user data is received (server.js currently set up to return the last user if registration is correct)
-			if(user){
+			if(user.id){
 				//loadUser is defined in App.js & passed down as prop to Register.js
 				this.props.loadUser(user);
 				// Change route to 'home' (ie, user will be redirected to home page)
