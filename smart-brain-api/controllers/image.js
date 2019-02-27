@@ -1,5 +1,4 @@
-// Set up Clarifai API (enter API key, assign to var 'app') - code came from Clarifai's website
-// Moved API setup from front to backend so that API key is not viewable by user
+// Set up Clarifai API 
 const Clarifai = require('clarifai');
 
 const app = new Clarifai.App({
@@ -7,9 +6,9 @@ const app = new Clarifai.App({
 });
 
 const handleApiCall = (req, res) => {
-	app.models  // Set-up code for Clarifai API
-	.predict(Clarifai.FACE_DETECT_MODEL, req.body.input)  // Url input
-	.then(data => { //data = whatever info API gives us
+	app.models  
+	.predict(Clarifai.FACE_DETECT_MODEL, req.body.input)  
+	.then(data => { 
 		res.json(data);
 	})
 	.catch(err => res.status(400).json('unable to work with API'))
@@ -18,7 +17,7 @@ const handleApiCall = (req, res) => {
 const handleImage = (req, res, db) => {
 	const { id } = req.body;
 	db('users').where('id', '=', id)
-		.increment('entries', 1) //increment entries by 1
+		.increment('entries', 1) 
 		.returning('entries')
 		.then(entries => {
 			res.json(entries[0]);
