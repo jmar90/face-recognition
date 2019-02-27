@@ -1,8 +1,6 @@
 /***************************/
 /*		DATABASE SET-UP	   */
 /***************************/
-/* Prior to creating tables, be sure to create database by typing 'createdb [db name]' in your console.
-I called my database 'smart-brain,' so I typed createdb 'smart-brain'*/
 
 /* CREATE USERS TABLE */
 CREATE TABLE users (

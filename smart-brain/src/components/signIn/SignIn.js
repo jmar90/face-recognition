@@ -1,9 +1,6 @@
 import React from 'react';
 
-// SignIn has been converted to a 'smart' component (was previously just a 'const') so that it has state, which will allow 
-// us to monitor changes to the input of username/password
 class SignIn extends React.Component {
-	// Create states
 	constructor(props) {
 		super(props);
 		this.state = {
@@ -24,8 +21,6 @@ class SignIn extends React.Component {
 
 	// Create function that will run when when sign in data is submitted (ie, sign in button clicked)
 	onSubmitSignIn = () => {
-		// Send (via post request) the email & password back to server (but first convert JS object to JSON via stringify). 
-		// Server will compare entered user & password to user/password pairs in database.
 		fetch('http://localhost:3000/signin', {
 			method: 'post',
 			headers: {'Content-Type': 'application/json'},
@@ -36,17 +31,15 @@ class SignIn extends React.Component {
 		})
 		.then(response => response.json())
 		.then(user => {
-			// If the data received back from server = valid user id
 			if(user.id){
 				this.props.loadUser(user);
-				// Change route to 'home' (ie, user will be redirected to home page)
 				this.props.onRouteChange('home');
 			}
 		})
 	}
 
 	render () {
-		const { onRouteChange } = this.props; // Destructure props
+		const { onRouteChange } = this.props; 
 		return (
 			<article className= "br3 ba b--black-10 mv4 w-100 w-50-m w-25-1 mw6 shadow-5 center">
 				<main className="pa4 black-80">
@@ -59,7 +52,7 @@ class SignIn extends React.Component {
 				        	className="pa2 input-reset ba bg-transparent hover-bg-black hover-white w-100" 
 				        	type="email" name="email-address"  
 				        	id="email-address"
-				        	onChange = {this.onEmailChange}  // Add event listener for when input changes. When input does change, run onEmailChange function specified above.
+				        	onChange = {this.onEmailChange}  
 				        	/>
 				      </div>
 				      <div className="mv3">
@@ -75,7 +68,7 @@ class SignIn extends React.Component {
 				    </fieldset>
 				    <div className="">
 				      <input 
-				      	onClick = {this.onSubmitSignIn}  // When Sign In button clicked, run onRouteChange function & pass thru home as argument (ie, redirect back to homepage)
+				      	onClick = {this.onSubmitSignIn}  
 				      	className="b ph3 pv2 input-reset ba b--black bg-transparent grow pointer f6 dib" 
 				      	type="submit" 
 				      	value="Sign in" 

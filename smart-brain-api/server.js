@@ -3,7 +3,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const bcrypt = require('bcrypt-nodejs');
 const cors = require('cors');
-const knex = require('knex'); //knex is used for connecting to DB & using postgresql
+const knex = require('knex'); 
 
 const register = require('./controllers/register');
 const signin = require('./controllers/signin');
@@ -27,16 +27,12 @@ app.use(cors());
 
 // ROUTES
 /* Root/home route */
-app.get('/', (req, res) => {res.send(database.users);})
+app.get('/', (req, res) => {res.send('It is working');})
 
 /* Sign In */
-	//first run function with db & bcrypt, & then it automatically receives req & res
-	//so, we can use below syntax vs. writing '/signin', (req,res) => {signin.handleSignin(res,req,db,bcrypt)}
-	//Which syntax you use is a matter of preference (we'll keep the old syntax for register, profile, & image)
 app.post('/signin', signin.handleSignin(db, bcrypt))
 
 /* Register (create new user) */
-	// dependency injection - inject the dependency that handleRegister needs (ie, pass down var needed for handleRegister to run)
 app.post('/register', (req, res) => { register.handleRegister(req, res, db, bcrypt) })
 
 /* Profile */
@@ -47,6 +43,6 @@ app.put('/image', (req, res) => { image.handleImage(req, res, db) })
 app.post('/imageurl', (req, res) => { image.handleApiCall(req, res) })
 
 // CREATE SERVER ON PORT 3000
-app.listen(3000, () => {
-	console.log('App is running on port 3000');
+app.listen(process.env.PORT || 3000, () => {
+	console.log(`App is running on port ${process.env.PORT}`);
 })
