@@ -12,32 +12,23 @@ import './App.css';
 // Set up Particles.js: Select properties of particles & assign them to var particlesOption
 const particlesOptions = {
   particles: {
-    number: {
-      value: 300,
-      density: {
-        enable: true,
-        value_area: 800
-      }
+    number: { 
+      value: 275,
+      density: { enable: true } 
     },
-    opacity: {
-      value: 0.3
+    opacity: { value: 0.3 },
+    size: { 
+      value: 28,
+      random: true
     },
-    line_linked: {
-      opacity: 0.3
-    }
-  },
-  interactivity: {
-    detect_on: 'window',
-    events: {
-      onhover: {
-        enable: true,
-        mode: 'repulse'
-      },
-      onclick: {
-        enable: true,
-        mode: 'repulse'
-      },
-      resize: true
+    line_linked: { enable: false },
+    move: {
+      enable: true,
+      speed: 6,
+      direction: "none",
+      random: false,
+      straight: false,
+      out_mode: "out"
     }
   }
 }
